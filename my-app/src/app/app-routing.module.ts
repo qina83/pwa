@@ -1,7 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import {MainPageComponent} from "./main-page/main-page.component";
+import {SecondaryPageComponent} from "./secondary-page/secondary-page.component";
 
-const routes: Routes = [];
+const routes: Routes = [
+  { path: 'mainPage', component: MainPageComponent },
+  { path: 'secondaryPage',      component: SecondaryPageComponent },
+  { path: '',
+    redirectTo: '/mainPage',
+    pathMatch: 'full'
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
