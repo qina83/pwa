@@ -34,10 +34,10 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    AngularFireModule.initializeApp(environment.firebase, 'MoneyLeft3'), // imports firebase/app needed for everything
-    AngularFirestoreModule, // imports firebase/firestore, only needed for database features
-    AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
-    AngularFireStorageModule // imports firebase/storage only needed for storage features
+    AngularFireModule.initializeApp(environment.firebase, 'MoneyLeft3'),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
+    AngularFireStorageModule
   ],
   providers: [],
   bootstrap: [AppComponent]
