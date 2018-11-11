@@ -1,53 +1,60 @@
 import { Injectable } from '@angular/core';
-import { Category } from './category';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { CategoryDTO } from './category-dto';
 
 const CATEGORY_COLLECTION_NAME = 'categories';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CategoriesApiService {
 
   private _isLogged = false;
+  private _user: firebase.auth.UserCredential;
 
   constructor(private dbFireService: AngularFirestore,
     private authFireService: AngularFireAuth) {
 
   }
 
-  private login() {
-    this.authFireService.auth.signInWithEmailAndPassword('', '')
-      .then(() => this._isLogged = true)
-      .catch(() => {
-        // manage error
-      });
-
+  private async login(): Promise<firebase.auth.UserCredential> {
+    if (this._isLogged) return Promise.resolve(this._user); else {
+      const credential = await this.authFireService.auth.signInWithEmailAndPassword('', '');
+      return this._user = credential;
+    }
   }
 
-  public loadCategories(): Promise<Category[]> {
-   this.dbFireService.collection(CATEGORY_COLLECTION_NAME)
+  public async loadCategories(): Promise<CategoryDTO[]> {
+    await this.login();
+    return this.dbFireService.collection(CATEGORY_COLLECTION_NAME)
       .get()
-      .pipe(map(data => data.forEach(d =>{
-        d.data.
-      })))
+      .pipe(map(data => {
+        const categories: CategoryDTO[] = [];
+        data.docs.forEach(doc => {
+          categories.push((<CategoryDTO>doc.data()));
+        });
+        return categories;
+      }))
       .toPromise();
   }
 
-  public addCategory(category: Category): Promise<boolean> {
-
+  public async addCategory(category: CategoryDTO): Promise<void> {
+    await this.login();
+    return this.dbFireService.collection(CATEGORY_COLLECTION_NAME)
+      .doc(category.code).set(category);
   }
 
 
-  public modifyCategory(category: Category): Promise<boolean> {
-
+  public async modifyCategory(category: CategoryDTO): Promise<void> {
+    await this.login();
+    return this.dbFireService.collection(CATEGORY_COLLECTION_NAME)
+      .doc(category.code).set(category);
   }
 
 
-  public deleteCategoryByCode(code: string): Promise<boolean> {
-
+  public async deleteCategoryByCode(code: string): Promise<void> {
+    await this.login();
+    return this.dbFireService.collection(CATEGORY_COLLECTION_NAME)
+      .doc(code).delete();
   }
 }
