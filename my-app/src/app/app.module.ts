@@ -15,13 +15,17 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { CategoriesManagerComponent } from './categories-manager/categories-manager.component';
+import { CategoriesApiService } from './categories-api.service';
+import { CategoriesService } from './categories.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavigationComponent,
     MainPageComponent,
-    SecondaryPageComponent
+    SecondaryPageComponent,
+    CategoriesManagerComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +43,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
     AngularFireAuthModule,
     AngularFireStorageModule
   ],
-  providers: [],
+  providers: [CategoriesApiService, CategoriesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

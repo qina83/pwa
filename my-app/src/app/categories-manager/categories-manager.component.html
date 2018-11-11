@@ -1,0 +1,9 @@
+<p>
+  catgories-manager works!
+</p>
+<button (click)="updateList()">Update</button>
+<ul>
+  <li *ngFor="let category of categories | async">
+    {{ category.name }}
+  </li>
+</ul>
