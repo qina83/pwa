@@ -7,7 +7,7 @@ import { CategoriesApiService } from './categories-api.service';
 @Injectable()
 export class CategoriesService {
 
-  private _categories = new BehaviorSubject<Category[]>(null);
+  private _categories = new BehaviorSubject<Category[]>([]);
 
   public get categories(): Observable<Category[]> {
     return this._categories.asObservable();
@@ -22,6 +22,7 @@ export class CategoriesService {
         categoriesDTO.forEach(categoryDTO => {
           const category = new Category();
           category.mapFromDTO(categoryDTO);
+          categories.push(category);
         });
         this._categories.next(categories);
       })
@@ -47,7 +48,7 @@ export class CategoriesService {
   }
 
   public addCategory(category: Category) {
-    this.cateoriesApiService.addCategory(category)
+    this.cateoriesApiService.addCategory(category.mapToDTO())
       .then(() => {
         const cats = this._categories.value;
         this._categories.next([
