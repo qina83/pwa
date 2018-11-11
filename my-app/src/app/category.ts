@@ -24,7 +24,7 @@ export class Category {
     }
 
     public set icon(value: string) {
-        this.icon = value;
+        this._icon = value;
     }
 
     constructor() {
