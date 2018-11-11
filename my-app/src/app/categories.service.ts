@@ -17,39 +17,47 @@ export class CategoriesService {
 
   public loadCategories() {
     this.cateoriesApiService.loadCategories()
-      .then(categories => {
+      .then(categoriesDTO => {
+        const categories = [];
+        categoriesDTO.forEach(categoryDTO => {
+          const category = new Category();
+          category.mapFromDTO(categoryDTO);
+        });
         this._categories.next(categories);
+      })
+      .catch(reason => {
+        console.error(reason);
+        // How to manage error?
       });
   }
 
   public removeCatgory(code: string) {
     this.cateoriesApiService.deleteCategoryByCode(code)
-      .then(result => {
-        if (result) {
-          const cats = this._categories.value;
-          const index = cats.findIndex(cat => cat.code === code);
-          this._categories.next([
-            ...cats.slice(0, index),
-            ...cats.slice(index + 1)
-          ]);
-        } else {
-          // manage error
-        }
+      .then(() => {
+        const cats = this._categories.value;
+        const index = cats.findIndex(cat => cat.code === code);
+        this._categories.next([
+          ...cats.slice(0, index),
+          ...cats.slice(index + 1)
+        ]);
+      }).catch(reason => {
+        console.error(reason);
+        // How to manage error?
       });
   }
 
   public addCategory(category: Category) {
     this.cateoriesApiService.addCategory(category)
-      .then(result => {
-        if (result) {
-          const cats = this._categories.value;
-          this._categories.next([
-            ...cats,
-            category,
-          ]);
-        } else {
-          // manage error
-        }
+      .then(() => {
+        const cats = this._categories.value;
+        this._categories.next([
+          ...cats,
+          category,
+        ]);
+      })
+      .catch(reason => {
+        console.error(reason);
+        // How to manage error?
       });
   }
 
