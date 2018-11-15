@@ -17,7 +17,7 @@ export class CategoriesService {
 
   public loadCategories() {
     this.cateoriesApiService.loadCategories()
-      .then(categoriesDTO => {
+      .subscribe(categoriesDTO => {
         const categories = [];
         categoriesDTO.forEach(categoryDTO => {
           const category = new Category();
@@ -25,39 +25,40 @@ export class CategoriesService {
           categories.push(category);
         });
         this._categories.next(categories);
-      })
-      .catch(reason => {
-        console.error(reason);
+      },
+      error => {
+        console.error(error);
         // How to manage error?
       });
   }
 
   public removeCatgory(code: string) {
     this.cateoriesApiService.deleteCategoryByCode(code)
-      .then(() => {
+      .subscribe(() => {
         const cats = this._categories.value;
         const index = cats.findIndex(cat => cat.code === code);
         this._categories.next([
           ...cats.slice(0, index),
           ...cats.slice(index + 1)
         ]);
-      }).catch(reason => {
-        console.error(reason);
+      },
+      error => {
+        console.error(error);
         // How to manage error?
       });
   }
 
   public addCategory(category: Category) {
     this.cateoriesApiService.addCategory(category.mapToDTO())
-      .then(() => {
+      .subscribe(() => {
         const cats = this._categories.value;
         this._categories.next([
           ...cats,
           category,
         ]);
-      })
-      .catch(reason => {
-        console.error(reason);
+      },
+      error => {
+        console.error(error);
         // How to manage error?
       });
   }
