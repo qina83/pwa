@@ -3,6 +3,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { map } from 'rxjs/operators';
 import { CategoryDTO } from './category-dto';
+import { Observable, from } from 'rxjs';
+import { concatMap } from 'rxjs/operators';
 
 const CATEGORY_COLLECTION_NAME = 'categories';
 
@@ -24,37 +26,37 @@ export class CategoriesApiService {
     }
   }
 
-  public async loadCategories(): Promise<CategoryDTO[]> {
-    await this.login();
-    return this.dbFireService.collection(CATEGORY_COLLECTION_NAME)
-      .get()
-      .pipe(map(data => {
-        const categories: CategoryDTO[] = [];
-        data.docs.forEach(doc => {
-          categories.push((<CategoryDTO>doc.data()));
-        });
-        return categories;
-      }))
-      .toPromise();
+  public loadCategories(): Observable<CategoryDTO[]> {
+    return from(this.login()).pipe(
+      concatMap(() =>
+        this.dbFireService.collection(CATEGORY_COLLECTION_NAME)
+          .get()
+          .pipe(map(data => {
+            const categories: CategoryDTO[] = [];
+            data.docs.forEach(doc => {
+              categories.push((<CategoryDTO>doc.data()));
+            });
+            return categories;
+          }))));
   }
 
-  public async addCategory(category: CategoryDTO): Promise<void> {
-    await this.login();
-    return this.dbFireService.collection(CATEGORY_COLLECTION_NAME)
-      .doc(category.code).set(category);
-  }
-
-
-  public async modifyCategory(category: CategoryDTO): Promise<void> {
-    await this.login();
-    return this.dbFireService.collection(CATEGORY_COLLECTION_NAME)
-      .doc(category.code).set(category);
+  public addCategory(category: CategoryDTO): Observable<void> {
+    return from(this.login()).pipe(
+      concatMap(() => from(this.dbFireService.collection(CATEGORY_COLLECTION_NAME)
+        .doc(category.code).set(category))));
   }
 
 
-  public async deleteCategoryByCode(code: string): Promise<void> {
-    await this.login();
-    return this.dbFireService.collection(CATEGORY_COLLECTION_NAME)
-      .doc(code).delete();
+  public modifyCategory(category: CategoryDTO): Observable<void> {
+    return from(this.login()).pipe(
+      concatMap(() => from(this.dbFireService.collection(CATEGORY_COLLECTION_NAME)
+        .doc(category.code).set(category))));
+  }
+
+
+  public deleteCategoryByCode(code: string): Observable<void> {
+    return from(this.login()).pipe(
+      concatMap(() => from(this.dbFireService.collection(CATEGORY_COLLECTION_NAME)
+        .doc(code).delete())));
   }
 }
