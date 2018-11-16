@@ -38,7 +38,7 @@ import { CategoriesService } from './categories.service';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    AngularFireModule.initializeApp(environment.firebase, 'MoneyLeft3'),
+    AngularFireModule.initializeApp((<any>environment).firebase, 'MoneyLeft3'), // any just to aviod error for the moment
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule
