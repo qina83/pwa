@@ -1,11 +1,19 @@
 import { Guid } from 'guid-typescript';
 import { CategoryDTO } from './category-dto';
+import { Optional } from '@angular/core';
 
+interface Update {
+    name: string;
+    value?: string;
+}
+
+// try to use it as immutable
 export class Category {
 
     private _code: string;
     private _name: string;
     private _icon: string;
+
 
     public get code(): string {
         return this._code;
@@ -15,26 +23,44 @@ export class Category {
         return this._name;
     }
 
-    public set name(value: string) {
-        this._name = value;
+    public setName(value: string): Category {
+        const cloned = this.clone();
+        cloned._name = value;
+        return cloned;
     }
 
-    public get icon(): string {
-        return this._icon;
+    public setIcon(value: string): Category {
+        const cloned = this.clone();
+        cloned._icon = value;
+        return cloned;
     }
 
-    public set icon(value: string) {
-        this._icon = value;
+    private clone() {
+        const cloned: Category = new Category();
+        cloned._code = this.code;
+        cloned._icon = this._icon;
+        cloned._name = this.name;
+        return cloned;
     }
 
-    constructor() {
-        this._code = Guid.create().toString();
+
+    // tslint:disable-next-line:no-unnecessary-initializer
+    constructor(category: { code: string, name: string, icon: string } = undefined) {
+        if (!category)
+            this._code = Guid.create().toString();
+        else {
+            this._code = category.code;
+            this._icon = category.icon;
+            this._name = category.name;
+        }
     }
 
-    public mapFromDTO(dto: CategoryDTO) {
-        this._code = dto.code;
-        this._icon = dto.icon;
-        this.name = dto.name;
+    public mapFromDTO(dto: CategoryDTO): Category {
+        const category: Category = new Category();
+        category._code = dto.code;
+        category._icon = dto.icon;
+        category._name = dto.name;
+        return category;
     }
 
     public mapToDTO(): CategoryDTO {
@@ -44,6 +70,4 @@ export class Category {
             name: this._name
         };
     }
-
-
 }
