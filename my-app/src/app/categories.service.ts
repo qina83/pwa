@@ -20,16 +20,16 @@ export class CategoriesService {
       .subscribe(categoriesDTO => {
         const categories = [];
         categoriesDTO.forEach(categoryDTO => {
-          const category = new Category();
-          category.mapFromDTO(categoryDTO);
+          let category = new Category();
+          category = category.mapFromDTO(categoryDTO);
           categories.push(category);
         });
         this._categories.next(categories);
       },
-      error => {
-        console.error(error);
-        // How to manage error?
-      });
+        error => {
+          console.error(error);
+          // How to manage error?
+        });
   }
 
   public removeCatgory(code: string) {
@@ -42,10 +42,10 @@ export class CategoriesService {
           ...cats.slice(index + 1)
         ]);
       },
-      error => {
-        console.error(error);
-        // How to manage error?
-      });
+        error => {
+          console.error(error);
+          // How to manage error?
+        });
   }
 
   public addCategory(category: Category) {
@@ -57,14 +57,25 @@ export class CategoriesService {
           category,
         ]);
       },
-      error => {
-        console.error(error);
-        // How to manage error?
-      });
+        error => {
+          console.error(error);
+          // How to manage error?
+        });
   }
 
-  public modifyCategory(category: Category) {
-    // how to using immutable?
+  public substituteCategory(category: Category) {
+    this.cateoriesApiService.modifyCategory(category.mapToDTO())
+      .subscribe(() => {
+        const cats = this._categories.value;
+        this._categories.next([
+          ...cats,
+          category,
+        ]);
+      },
+        error => {
+          console.error(error);
+          // How to manage error?
+        });
   }
 
 }
