@@ -15,7 +15,7 @@ export class CategoriesManagerComponent {
   constructor(private categoriesService: CategoriesService) {
     this.categories = categoriesService.categories;
   }
-  
+
   public updateList() {
     this.categoriesService.loadCategories();
   }
