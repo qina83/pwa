@@ -65,10 +65,10 @@ export class CategoriesService {
   public substituteCategory(category: Category) {
     this.cateoriesApiService.modifyCategory(CategoryFactory.CategoryToDTO(category))
       .subscribe(() => {
-        const cats = this._categories.value;
+        const index = this._categories.value.findIndex(cat => cat.code === category.code);
+        const cats = Object.assign([], this._categories.value, {[index]: category});
         this._categories.next([
-          ...cats,
-          category,
+          ...cats
         ]);
       },
         error => {

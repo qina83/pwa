@@ -5,7 +5,7 @@ import { CategoryFactory } from './category-factory';
 
 
 
-fdescribe('CategoryFactory', () => {
+describe('CategoryFactory', () => {
 
   beforeEach(() => {
   });
