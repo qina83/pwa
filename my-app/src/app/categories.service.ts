@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Category } from './category';
 import { CategoriesApiService } from './categories-api.service';
+import { CategoryFactory } from './category-factory';
 
 
 @Injectable()
@@ -20,9 +21,7 @@ export class CategoriesService {
       .subscribe(categoriesDTO => {
         const categories = [];
         categoriesDTO.forEach(categoryDTO => {
-          let category = new Category();
-          category = category.mapFromDTO(categoryDTO);
-          categories.push(category);
+          categories.push(CategoryFactory.DTOToCategoy(categoryDTO));
         });
         this._categories.next(categories);
       },
@@ -32,7 +31,7 @@ export class CategoriesService {
         });
   }
 
-  public removeCatgory(code: string) {
+  public removeCategory(code: string) {
     this.cateoriesApiService.deleteCategoryByCode(code)
       .subscribe(() => {
         const cats = this._categories.value;
@@ -49,7 +48,7 @@ export class CategoriesService {
   }
 
   public addCategory(category: Category) {
-    this.cateoriesApiService.addCategory(category.mapToDTO())
+    this.cateoriesApiService.addCategory(CategoryFactory.CategoryToDTO(category))
       .subscribe(() => {
         const cats = this._categories.value;
         this._categories.next([
@@ -64,7 +63,7 @@ export class CategoriesService {
   }
 
   public substituteCategory(category: Category) {
-    this.cateoriesApiService.modifyCategory(category.mapToDTO())
+    this.cateoriesApiService.modifyCategory(CategoryFactory.CategoryToDTO(category))
       .subscribe(() => {
         const cats = this._categories.value;
         this._categories.next([
