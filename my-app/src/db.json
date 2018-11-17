@@ -1,0 +1,16 @@
+{
+    "categories": [
+        {
+            "code": "code1",
+            "icon": "icon1",
+            "name": "name1",
+            "direction": "in"
+        },
+        {
+            "code": "code2",
+            "icon": "icon1",
+            "name": "name1",
+            "direction": "out"
+        }
+    ]
+}
