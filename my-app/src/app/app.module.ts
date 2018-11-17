@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,6 +20,9 @@ import { CategoriesManagerComponent } from './categories-manager/categories-mana
 import { CategoriesApiService } from './categories-api.service';
 import { CategoriesService } from './categories.service';
 
+import { CategoriesJSApiService } from './categories-JSapi.service';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +32,7 @@ import { CategoriesService } from './categories.service';
     CategoriesManagerComponent
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
@@ -43,7 +48,11 @@ import { CategoriesService } from './categories.service';
     AngularFireAuthModule,
     AngularFireStorageModule
   ],
-  providers: [CategoriesApiService, CategoriesService],
+  providers: [CategoriesService,
+    {
+      provide: CategoriesApiService,
+      useClass: CategoriesJSApiService
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
