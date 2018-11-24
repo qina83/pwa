@@ -1,15 +1,12 @@
 <form #f="ngForm" (ngSubmit)="onSubmit(f.value)" class="ui form">
-  <div class="field">
-    <label for="name">Name</label>
-    <input type="text" id="name" placeholder="Name" name="name" [ngModel]="categoryToEdit?.name">
-  </div>
-  <div class="field">
-    <label for="icon">Name</label>
-    <input type="text" id="icon" placeholder="Icon" name="icon" [ngModel]="categoryToEdit?.icon">
-  </div>
-  <div class="field">
-    <label for="icon">Name</label>
-    <input type="text" id="direction" placeholder="Direction" name="direction" [ngModel]="categoryToEdit?.direction">
-  </div>
+    <mat-form-field>
+      <input matInput type="text" id="name" placeholder="Name" name="name" [ngModel]="categoryToEdit?.name">
+    </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" id="icon" placeholder="Icon" name="icon" [ngModel]="categoryToEdit?.icon">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" id="direction" placeholder="Direction" name="direction" [ngModel]="categoryToEdit?.direction">
+  </mat-form-field>
   <button type="submit" class="ui button">Submit</button>
 </form>

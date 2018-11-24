@@ -20,10 +20,11 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { CategoriesManagerComponent } from './categories-manager/categories-manager.component';
 import { CategoriesApiService } from './categories-api.service';
 import { CategoriesService } from './categories.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { CategoriesJSApiService } from './categories-JSapi.service';
 import { CategoryComponent } from './category/category.component';
-
+import { MatInputModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,8 @@ import { CategoryComponent } from './category/category.component';
     CategoryComponent
   ],
   imports: [
+    MatInputModule,
+    MatFormFieldModule,
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
