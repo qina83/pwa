@@ -22,16 +22,16 @@ export class CategoriesJSApiService {
   }
 
   public addCategory(category: CategoryDTO): Observable<void> {
-    return null;
+    return this.http.post<void>('http://localhost:3000/categories', category);
   }
 
 
   public modifyCategory(category: CategoryDTO): Observable<void> {
-    return null;
+    return this.http.put<void>('http://localhost:3000/categories/' + category.code, category);
   }
 
 
   public deleteCategoryByCode(code: string): Observable<void> {
-    return null;
+    return this.http.delete<void>('http://localhost:3000/categories/' + code);
   }
 }
