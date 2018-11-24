@@ -24,7 +24,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { CategoriesJSApiService } from './categories-JSapi.service';
 import { CategoryComponent } from './category/category.component';
-import { MatInputModule } from '@angular/material';
+import { MatInputModule, MatSelectModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -38,6 +38,7 @@ import { MatInputModule } from '@angular/material';
   imports: [
     MatInputModule,
     MatFormFieldModule,
+    MatSelectModule,
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
