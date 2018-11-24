@@ -4,6 +4,6 @@
 <button (click)="updateList()">Update</button>
 <ul>
   <li *ngFor="let category of categories | async">
-    {{ category.name }}
+    <a [routerLink]="['/categoryPage', category.code]">{{ category.name }}</a>
   </li>
 </ul>

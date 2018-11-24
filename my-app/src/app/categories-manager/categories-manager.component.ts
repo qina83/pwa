@@ -20,4 +20,6 @@ export class CategoriesManagerComponent {
     this.categoriesService.loadCategories();
   }
 
+
+
 }

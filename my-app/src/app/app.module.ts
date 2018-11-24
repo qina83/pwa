@@ -21,6 +21,7 @@ import { CategoriesApiService } from './categories-api.service';
 import { CategoriesService } from './categories.service';
 
 import { CategoriesJSApiService } from './categories-JSapi.service';
+import { CategoryComponent } from './category/category.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { CategoriesJSApiService } from './categories-JSapi.service';
     NavigationComponent,
     MainPageComponent,
     SecondaryPageComponent,
-    CategoriesManagerComponent
+    CategoriesManagerComponent,
+    CategoryComponent
   ],
   imports: [
     HttpClientModule,
