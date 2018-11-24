@@ -10,11 +10,18 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./category.component.scss']
 })
 export class CategoryComponent {
-  categories: Observable<Category[]>;
+
+  public categoryToEdit: Category;
 
   constructor(private categoriesService: CategoriesService, private route: ActivatedRoute) {
-    this.categories = categoriesService.categories;
-    console.log('CODE', this.route.snapshot.params['code']);
+    const code: string = this.route.snapshot.params['code'];
+    this.categoryToEdit = categoriesService.getCagetoryByCode(code);
   }
+
+  onSubmit(form: any): void {
+    console.log('you submitted value:', form);
+    //how to check that submit si completed?
+  }
+
 
 }

@@ -14,6 +14,8 @@ export class CategoriesService {
     return this._categories.asObservable();
   }
 
+  
+
   constructor(private cateoriesApiService: CategoriesApiService) { }
 
   public loadCategories() {
@@ -75,6 +77,10 @@ export class CategoriesService {
           console.error(error);
           // How to manage error?
         });
+  }
+
+  public getCagetoryByCode(code: string): Category{
+    return this._categories.value.find(cat => cat.code === code);
   }
 
 }
