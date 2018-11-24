@@ -14,8 +14,6 @@ export class CategoriesService {
     return this._categories.asObservable();
   }
 
-  
-
   constructor(private cateoriesApiService: CategoriesApiService) { }
 
   public loadCategories() {
