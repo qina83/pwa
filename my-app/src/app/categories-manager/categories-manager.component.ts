@@ -3,6 +3,9 @@ import { CategoriesService } from '../categories.service';
 import { Category } from '../category';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { ConfirmEnum } from '../confirm-dialog/confirm-action';
 
 @Component({
   selector: 'app-catgories-manager',
@@ -14,7 +17,8 @@ export class CategoriesManagerComponent implements OnInit {
   public categories: Observable<Category[]>;
 
   constructor(private categoriesService: CategoriesService,
-    private router: Router) {
+    private router: Router,
+    private dialog: MatDialog) {
     this.categories = categoriesService.categories;
   }
 
@@ -29,4 +33,14 @@ export class CategoriesManagerComponent implements OnInit {
   private updateList() {
     this.categoriesService.loadCategories();
   }
+
+  public deleteCategory(code: string) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === ConfirmEnum.Yes)
+        this.categoriesService.removeCategory(code);
+    });
+  }
+
 }

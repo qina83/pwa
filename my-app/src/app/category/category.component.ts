@@ -51,9 +51,7 @@ export class CategoryComponent {
 
 
   private requestConfirm() {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '250px'
-    });
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === ConfirmEnum.Yes)
@@ -65,6 +63,4 @@ export class CategoryComponent {
   public dismiss() {
     this.requestConfirm();
   }
-
-
 }
