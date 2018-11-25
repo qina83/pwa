@@ -12,11 +12,20 @@ export class CategoryComponent {
 
   public categoryToEdit: Category;
 
+  private newCategory: boolean = false;
+
   constructor(private categoriesService: CategoriesService,
     private router: Router,
     private route: ActivatedRoute) {
     const code: string = this.route.snapshot.params['code'];
-    this.categoryToEdit = categoriesService.getCagetoryByCode(code);
+    if (!code) {
+      this.newCategory = true;
+      this.categoryToEdit = new Category();
+    }
+    else {
+      this.newCategory = false;
+      this.categoryToEdit = categoriesService.getCagetoryByCode(code);
+    }
   }
 
   onSubmit(form: any): void {
@@ -25,9 +34,19 @@ export class CategoryComponent {
       .setDirection(form['direction'])
       .setName(form['name'])
       .setIcon(form['icon']);
-     this.categoriesService.substituteCategory(category);
-     this.router.navigate(['/categoryPage']);
+
+    if (this.newCategory)
+      this.categoriesService.addCategory(category);
+    else
+      this.categoriesService.substituteCategory(category);
+
+    this.router.navigate(['/categories']);
     // how to check that submit si completed?
+  }
+
+
+  public dismiss(){
+    this.router.navigate(['/categories']);
   }
 
 

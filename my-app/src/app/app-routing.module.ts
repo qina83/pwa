@@ -8,11 +8,12 @@ import { CategoryComponent } from './category/category.component';
 const routes: Routes = [
   { path: 'mainPage', component: MainPageComponent },
   { path: 'secondaryPage', component: SecondaryPageComponent },
-  { path: 'categoryPage', component: CategoriesManagerComponent , pathMatch: 'full'},
+  { path: 'categories', component: CategoriesManagerComponent },
   { path: 'categoryPage/:code', component: CategoryComponent },
+  { path: 'categoryPage', component: CategoryComponent },
   {
     path: '',
-    redirectTo: '/categoryPage',
+    redirectTo: '/categories',
     pathMatch: 'full'
   }
 ];

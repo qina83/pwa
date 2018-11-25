@@ -1,7 +1,7 @@
 <p>
   catgories-manager works!
 </p>
-<button (click)="updateList()">Update</button>
+<button (click)="createNew()">New</button>
 <ul>
   <li *ngFor="let category of categories | async">
     <a [routerLink]="['/categoryPage', category.code]">{{ category.name }}</a>
