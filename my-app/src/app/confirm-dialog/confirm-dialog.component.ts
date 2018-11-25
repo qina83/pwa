@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ConfirmEnum } from "./confirm-action";
+import { ConfirmEnum } from './confirm-action';
 
 @Component({
   selector: 'app-confirm-dialog',

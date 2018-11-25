@@ -4,7 +4,7 @@ import { Category } from '../category';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { ConfirmEnum } from "../confirm-dialog/confirm-action";
+import { ConfirmEnum } from '../confirm-dialog/confirm-action';
 
 @Component({
   selector: 'app-category',
