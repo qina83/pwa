@@ -24,7 +24,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { CategoriesJSApiService } from './categories-JSapi.service';
 import { CategoryComponent } from './category/category.component';
-import { MatInputModule, MatSelectModule } from '@angular/material';
+import { MatInputModule, MatSelectModule, MatDialogModule } from '@angular/material';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -33,9 +34,11 @@ import { MatInputModule, MatSelectModule } from '@angular/material';
     MainPageComponent,
     SecondaryPageComponent,
     CategoriesManagerComponent,
-    CategoryComponent
+    CategoryComponent,
+    ConfirmDialogComponent
   ],
   imports: [
+    MatDialogModule,
     MatInputModule,
     MatFormFieldModule,
     MatSelectModule,
@@ -56,6 +59,7 @@ import { MatInputModule, MatSelectModule } from '@angular/material';
     AngularFireAuthModule,
     AngularFireStorageModule
   ],
+  entryComponents: [ConfirmDialogComponent],
   providers: [CategoriesService,
     {
       provide: CategoriesApiService,

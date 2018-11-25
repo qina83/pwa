@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { CategoriesService } from '../categories.service';
 import { Category } from '../category';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { ConfirmEnum } from "../confirm-dialog/confirm-action";
 
 @Component({
   selector: 'app-category',
@@ -16,7 +19,9 @@ export class CategoryComponent {
 
   constructor(private categoriesService: CategoriesService,
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private dialog: MatDialog
+  ) {
     const code: string = this.route.snapshot.params['code'];
     if (!code) {
       this.newCategory = true;
@@ -28,7 +33,7 @@ export class CategoryComponent {
     }
   }
 
-  onSubmit(form: any): void {
+  public onSubmit(form: any): void {
     console.log('you submitted value:', form, this.categoryToEdit);
     const category = this.categoryToEdit
       .setDirection(form['direction'])
@@ -45,8 +50,20 @@ export class CategoryComponent {
   }
 
 
-  public dismiss(){
-    this.router.navigate(['/categories']);
+  private requestConfirm() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '250px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === ConfirmEnum.Yes)
+        this.router.navigate(['/categories']);
+    });
+  }
+
+
+  public dismiss() {
+    this.requestConfirm();
   }
 
 
