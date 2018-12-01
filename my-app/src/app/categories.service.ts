@@ -42,7 +42,7 @@ export class CategoriesService {
     return this.cateoriesApiService.deleteCategoryByCode(code)
       .toPromise()
       .then(() => {
-        this.loadCategories();
+        return this.loadCategories();
       })
       .catch(error => {
         this.errorsService.sendError(error.message);
@@ -65,7 +65,9 @@ export class CategoriesService {
   public substituteCategory(category: Category): Promise<void> {
     return this.cateoriesApiService.modifyCategory(CategoryFactory.CategoryToDTO(category))
       .toPromise()
-      .then(() => this.loadCategories())
+      .then(() => {
+        return this.loadCategories();
+      })
       .catch(error => {
         this.errorsService.sendError(error.message);
         throw new Error(error);

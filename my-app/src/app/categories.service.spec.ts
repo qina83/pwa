@@ -1,12 +1,14 @@
 import { cold, getTestScheduler } from 'jasmine-marbles';
 import { CategoriesService } from './categories.service';
 import { CategoriesApiService } from './categories-api.service';
+import { ErrorsService } from './errors.service';
 import { CategoryDTO } from './category-dto';
 import { of } from 'rxjs';
 import { Category, CategoryDirection } from './category';
 
-fdescribe('CategoriesService', () => {
+describe('CategoriesService', () => {
   let categoriesApiServiceStub: CategoriesApiService;
+  let errorServiceStub: ErrorsService;
   let sut: CategoriesService;
 
   beforeEach(() => {
@@ -16,7 +18,10 @@ fdescribe('CategoriesService', () => {
     categoriesApiServiceStub.deleteCategoryByCode = (code: string) => null;
     categoriesApiServiceStub.modifyCategory = (category: Category) => null;
 
-    sut = new CategoriesService(categoriesApiServiceStub);
+    errorServiceStub = <ErrorsService>{};
+    errorServiceStub.sendError = (errorMessage: string) => null;
+
+    sut = new CategoriesService(categoriesApiServiceStub, errorServiceStub);
   });
 
   it('should categories be empty array and not null after creation', () => {
@@ -71,7 +76,7 @@ fdescribe('CategoriesService', () => {
   });
 
 
-  fit('should categories emits 2 events if addCategory is called twice', () => {
+  it('should addCategory call loadCategories', (done) => {
     const cat1 = new Category({
       code: 'code1',
       icon: 'icon1',
@@ -93,86 +98,24 @@ fdescribe('CategoriesService', () => {
 
     spyOn(sut, 'loadCategories').and.callThrough();
 
-    sut.addCategory(cat1);
-    sut.addCategory(cat2);
-
-    expect(sut.loadCategories).toHaveBeenCalledTimes(2);
-
+    sut.addCategory(cat1).then(() => {
+      expect(sut.loadCategories).toHaveBeenCalledTimes(1);
+      done();
+    });
   });
 
-
-  it('should categories emits 1 events if deleteCategory is called', () => {
-    const scheduler = getTestScheduler();
-    const cat1 = new Category({
-      code: 'code1',
-      icon: 'icon1',
-      name: 'name1',
-      direction: CategoryDirection.in
-    });
-    const cat2 = new Category({
-      code: 'code2',
-      icon: 'icon2',
-      name: 'name2',
-      direction: CategoryDirection.out
-    });
-
-    spyOn(categoriesApiServiceStub, 'addCategory').and
-      .callFake(function (category: CategoryDTO) { return of({}); });
+  it('should removeCategory call loadCategories', (done) => {
+    spyOn(categoriesApiServiceStub, 'loadCategories').and
+      .callFake(function () { return of([]); });
 
     spyOn(categoriesApiServiceStub, 'deleteCategoryByCode').and
       .callFake(function (code: string) { return of({}); });
 
-    scheduler.schedule(() => sut.addCategory(cat1), 10);
-    scheduler.schedule(() => sut.addCategory(cat2), 20);
-    scheduler.schedule(() => sut.removeCategory(cat1.code), 30);
+    spyOn(sut, 'loadCategories').and.callThrough();
 
-    // how to test only delete?
-    const expected = cold('abcd', { a: [], b: [cat1], c: [cat1, cat2], d: [cat2] });
-
-    expect(sut.categories).toBeObservable(expected);
-
-    scheduler.flush();
-  });
-
-
-  it('should categories emits 1 events if substituteCategory is called', () => {
-    const scheduler = getTestScheduler();
-    const cat1 = new Category({
-      code: 'code1',
-      icon: 'icon1',
-      name: 'name1',
-      direction: CategoryDirection.in
+    sut.removeCategory('code1').then(() => {
+      expect(sut.loadCategories).toHaveBeenCalledTimes(1);
+      done();
     });
-
-    const cat2 = new Category({
-      code: 'code2',
-      icon: 'icon2',
-      name: 'name2',
-      direction: CategoryDirection.out
-    });
-
-    const cat3 = new Category({
-      code: 'code2',
-      icon: 'icon3',
-      name: 'name2',
-      direction: CategoryDirection.out
-    });
-
-    spyOn(categoriesApiServiceStub, 'addCategory').and
-      .callFake(function (category: CategoryDTO) { return of({}); });
-
-    spyOn(categoriesApiServiceStub, 'modifyCategory').and
-      .callFake(function (category: Category) { return of({}); });
-
-    scheduler.schedule(() => sut.addCategory(cat1), 10);
-    scheduler.schedule(() => sut.addCategory(cat2), 20);
-    scheduler.schedule(() => sut.substituteCategory(cat2.setIcon('icon3')), 30);
-
-    // how to test only delete?
-    const expected = cold('abcd', { a: [], b: [cat1], c: [cat1, cat2], d: [cat1, cat3] });
-
-    expect(sut.categories).toBeObservable(expected);
-
-    scheduler.flush();
   });
 });
