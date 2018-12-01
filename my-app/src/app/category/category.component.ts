@@ -34,19 +34,17 @@ export class CategoryComponent {
   }
 
   public onSubmit(form: any): void {
-    console.log('you submitted value:', form, this.categoryToEdit);
     const category = this.categoryToEdit
       .setDirection(form['direction'])
       .setName(form['name'])
       .setIcon(form['icon']);
 
     if (this.newCategory)
-      this.categoriesService.addCategory(category);
+      this.categoriesService.addCategory(category)
+        .then(() => this.router.navigate(['/categories']));
     else
-      this.categoriesService.substituteCategory(category);
-
-    this.router.navigate(['/categories']);
-    // how to check that submit si completed?
+      this.categoriesService.substituteCategory(category)
+        .then(() => this.router.navigate(['/categories']));
   }
 
 

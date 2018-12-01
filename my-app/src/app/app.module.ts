@@ -10,7 +10,6 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavigationComponent } from './navigation/navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
 import { MainPageComponent } from './main-page/main-page.component';
 import { SecondaryPageComponent } from './secondary-page/secondary-page.component';
 import { AngularFireModule } from '@angular/fire';
@@ -20,12 +19,26 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { CategoriesManagerComponent } from './categories-manager/categories-manager.component';
 import { CategoriesApiService } from './categories-api.service';
 import { CategoriesService } from './categories.service';
+import { ErrorsService } from './errors.service';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MatInputModule,
+  MatSelectModule,
+  MatDialogModule,
+  MatSnackBarModule,
+  MatToolbarModule,
+  MatButtonModule,
+  MatSidenavModule,
+  MatIconModule,
+  MatListModule
+} from '@angular/material';
 
 import { CategoriesJSApiService } from './categories-JSapi.service';
 import { CategoryComponent } from './category/category.component';
-import { MatInputModule, MatSelectModule, MatDialogModule } from '@angular/material';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { ErrorSnackBarComponent } from './error-snack-bar/error-snack-bar.component';
+
 
 @NgModule({
   declarations: [
@@ -35,9 +48,11 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     SecondaryPageComponent,
     CategoriesManagerComponent,
     CategoryComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    ErrorSnackBarComponent
   ],
   imports: [
+    MatSnackBarModule,
     MatDialogModule,
     MatInputModule,
     MatFormFieldModule,
@@ -59,8 +74,9 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     AngularFireAuthModule,
     AngularFireStorageModule
   ],
-  entryComponents: [ConfirmDialogComponent],
+  entryComponents: [ConfirmDialogComponent, ErrorSnackBarComponent],
   providers: [CategoriesService,
+    ErrorsService,
     {
       provide: CategoriesApiService,
       useClass: CategoriesJSApiService

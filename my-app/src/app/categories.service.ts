@@ -3,7 +3,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Category } from './category';
 import { CategoriesApiService } from './categories-api.service';
 import { CategoryFactory } from './category-factory';
-import { concatMap, tap, map } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
+import { ErrorsService, ErrorData } from './errors.service';
 
 
 @Injectable()
@@ -15,13 +16,12 @@ export class CategoriesService {
     return this._categories.asObservable();
   }
 
-  constructor(private cateoriesApiService: CategoriesApiService) { }
+  constructor(private cateoriesApiService: CategoriesApiService, private errorsService: ErrorsService) { }
 
   public loadCategories(): Promise<void> {
     return this.cateoriesApiService.loadCategories()
       .pipe(
         tap((categoriesDTO) => {
-          console.log('sss');
           const categories = [];
           categoriesDTO.forEach(categoryDTO => {
             categories.push(CategoryFactory.DTOToCategoy(categoryDTO));
@@ -32,7 +32,8 @@ export class CategoriesService {
       )
       .toPromise()
       .catch(error => {
-        console.error(error);
+        this.errorsService.sendError(error.message);
+        console.log(error);
         throw new Error(error);
       });
   }
@@ -44,7 +45,7 @@ export class CategoriesService {
         this.loadCategories();
       })
       .catch(error => {
-        console.error(error);
+        this.errorsService.sendError(error.message);
         throw new Error(error);
       });
   }
@@ -53,11 +54,10 @@ export class CategoriesService {
     return this.cateoriesApiService.addCategory(CategoryFactory.CategoryToDTO(category))
       .toPromise()
       .then(() => {
-        console.log('ASDAD');
         return this.loadCategories();
       })
       .catch(error => {
-        console.error(error);
+        this.errorsService.sendError(error.message);
         throw new Error(error);
       });
   }
@@ -67,7 +67,7 @@ export class CategoriesService {
       .toPromise()
       .then(() => this.loadCategories())
       .catch(error => {
-        console.error(error);
+        this.errorsService.sendError(error.message);
         throw new Error(error);
       });
   }

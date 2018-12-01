@@ -31,15 +31,17 @@ export class CategoriesManagerComponent implements OnInit {
   }
 
   private updateList() {
-    this.categoriesService.loadCategories();
+    this.categoriesService.loadCategories()
+    .catch();
   }
 
-  public deleteCategory(code: string) {
+  public async deleteCategory(code: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === ConfirmEnum.Yes)
-        this.categoriesService.removeCategory(code);
+        this.categoriesService.removeCategory(code)
+        .catch();
     });
   }
 

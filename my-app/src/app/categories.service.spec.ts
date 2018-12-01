@@ -5,7 +5,7 @@ import { CategoryDTO } from './category-dto';
 import { of } from 'rxjs';
 import { Category, CategoryDirection } from './category';
 
-describe('CategoriesService', () => {
+fdescribe('CategoriesService', () => {
   let categoriesApiServiceStub: CategoriesApiService;
   let sut: CategoriesService;
 
@@ -71,8 +71,7 @@ describe('CategoriesService', () => {
   });
 
 
-  it('should categories emits 2 events if addCategory is called twice', () => {
-    const scheduler = getTestScheduler();
+  fit('should categories emits 2 events if addCategory is called twice', () => {
     const cat1 = new Category({
       code: 'code1',
       icon: 'icon1',
@@ -86,17 +85,19 @@ describe('CategoriesService', () => {
       direction: CategoryDirection.out
     });
 
+    spyOn(categoriesApiServiceStub, 'loadCategories').and
+      .callFake(function () { return of([]); });
+
     spyOn(categoriesApiServiceStub, 'addCategory').and
       .callFake(function (category: CategoryDTO) { return of({}); });
 
-    scheduler.schedule(() => sut.addCategory(cat1), 10);
-    scheduler.schedule(() => sut.addCategory(cat2), 20);
+    spyOn(sut, 'loadCategories').and.callThrough();
 
-    const expected = cold('abc', { a: [],  b: [cat1], c: [cat1, cat2]});
-    expect(sut.categories).toBeObservable(expected);
+    sut.addCategory(cat1);
+    sut.addCategory(cat2);
 
-    // activate the scheduler so the test can properly run!
-    scheduler.flush();
+    expect(sut.loadCategories).toHaveBeenCalledTimes(2);
+
   });
 
 
@@ -116,7 +117,7 @@ describe('CategoriesService', () => {
     });
 
     spyOn(categoriesApiServiceStub, 'addCategory').and
-    .callFake(function (category: CategoryDTO) { return of({}); });
+      .callFake(function (category: CategoryDTO) { return of({}); });
 
     spyOn(categoriesApiServiceStub, 'deleteCategoryByCode').and
       .callFake(function (code: string) { return of({}); });
@@ -126,7 +127,7 @@ describe('CategoriesService', () => {
     scheduler.schedule(() => sut.removeCategory(cat1.code), 30);
 
     // how to test only delete?
-    const expected = cold('abcd', { a: [],  b: [cat1], c: [cat1, cat2], d: [cat2]});
+    const expected = cold('abcd', { a: [], b: [cat1], c: [cat1, cat2], d: [cat2] });
 
     expect(sut.categories).toBeObservable(expected);
 
@@ -158,7 +159,7 @@ describe('CategoriesService', () => {
     });
 
     spyOn(categoriesApiServiceStub, 'addCategory').and
-    .callFake(function (category: CategoryDTO) { return of({}); });
+      .callFake(function (category: CategoryDTO) { return of({}); });
 
     spyOn(categoriesApiServiceStub, 'modifyCategory').and
       .callFake(function (category: Category) { return of({}); });
@@ -168,7 +169,7 @@ describe('CategoriesService', () => {
     scheduler.schedule(() => sut.substituteCategory(cat2.setIcon('icon3')), 30);
 
     // how to test only delete?
-    const expected = cold('abcd', { a: [],  b: [cat1], c: [cat1, cat2], d: [cat1, cat3]});
+    const expected = cold('abcd', { a: [], b: [cat1], c: [cat1, cat2], d: [cat1, cat3] });
 
     expect(sut.categories).toBeObservable(expected);
 
