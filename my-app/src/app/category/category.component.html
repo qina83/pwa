@@ -5,9 +5,14 @@
     </mat-form-field>
   </div>
   <div>
-    <mat-form-field>
-      <input matInput type="text" placeholder="Icon" name="icon" [ngModel]="categoryToEdit?.icon">
-    </mat-form-field>
+      <mat-form-field>
+          <mat-select matInput placeholder="Icon" name="icon" [ngModel]="categoryToEdit?.icon" (ngModelChange)="icon = $event">
+            <mat-option [value]="'accessibility'"><mat-icon>accessibility</mat-icon></mat-option>
+            <mat-option [value]="'invert_colors'"><mat-icon>invert_colors</mat-icon></mat-option>
+            <mat-option [value]="'pan_tool'"><mat-icon>pan_tool</mat-icon></mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-icon>{{icon ? icon : categoryToEdit?.icon }}</mat-icon>
   </div>
   <div>
     <mat-form-field>
